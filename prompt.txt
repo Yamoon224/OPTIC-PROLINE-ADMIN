@@ -1,0 +1,123 @@
+Inspire toi du contenu des conversations suivantes
+  Rules : https://claude.ai/chat/9a82c13d-edef-48c1-985d-09114cc90b8c
+  Services : https://claude.ai/chat/3caad4d7-935b-411e-890c-d81194a95872
+  Policies : https://claude.ai/chat/c10c74cc-b99e-4ce7-af9f-b49ad28b2401
+  Repositories : https://claude.ai/chat/e8346b91-3a0e-4f9d-a6e8-6b99d5b1fb32
+Pour me generer les controllers resources et API (Laravel) pour toutes ces tables : 
+-- Table: companies
+CREATE TABLE companies (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary key: Unique company ID',
+    name VARCHAR(255) NOT NULL COMMENT 'Name of the company',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Creation timestamp',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last update timestamp',
+    deleted_at TIMESTAMP NULL DEFAULT NULL COMMENT 'Timestamp of logical deletion (null if active)'
+);
+
+-- Table: users
+CREATE TABLE users (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary key: Unique user ID',
+    company_id INT NOT NULL COMMENT 'Foreign key referencing companies(id)',
+    name VARCHAR(255) NOT NULL COMMENT 'Full name of the user',
+    email VARCHAR(255) UNIQUE NOT NULL COMMENT 'User email (used for login)',
+    password VARCHAR(255) NOT NULL COMMENT 'Hashed password for authentication',
+    phone VARCHAR(20) COMMENT 'User phone number',
+    role ENUM('admin', 'staff') DEFAULT 'staff' COMMENT 'Role of the user within the company',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Creation timestamp',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last update timestamp',
+    deleted_at TIMESTAMP NULL DEFAULT NULL COMMENT 'Timestamp of logical deletion (null if active)',
+    FOREIGN KEY (company_id) REFERENCES companies(id)
+);
+
+-- Table: categories
+CREATE TABLE categories (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary key: Unique category ID',
+    name VARCHAR(100) NOT NULL COMMENT 'Name of the category',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Creation timestamp',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last update timestamp',
+    deleted_at TIMESTAMP NULL DEFAULT NULL COMMENT 'Timestamp of logical deletion (null if active)'
+);
+
+-- Table: products
+CREATE TABLE products (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary key: Unique product ID',
+    name VARCHAR(255) NOT NULL COMMENT 'Product name',
+    description TEXT COMMENT 'Technical description of the product',
+    unit_price DECIMAL(10,2) NOT NULL COMMENT 'Unit price of the product',
+    batch_price DECIMAL(10,2) DEFAULT NULL COMMENT 'Batch price if applicable',
+    stock_quantity INT DEFAULT 0 COMMENT 'Available stock quantity',
+    status ENUM('in_stock', 'on_demand') DEFAULT 'in_stock' COMMENT 'Stock status: available or on demand',
+    brand VARCHAR(100) COMMENT 'Brand of the product',
+    material VARCHAR(100) COMMENT 'Material type (plastic, metal, etc.)',
+    gender ENUM('men', 'women', 'unisex', 'kids') COMMENT 'Intended audience by gender',
+    shape VARCHAR(100) COMMENT 'Shape of the frame (round, square, etc.)',
+    color VARCHAR(100) COMMENT 'Color of the frame',
+    category_id INT COMMENT 'Foreign key referencing categories(id)',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Creation timestamp',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last update timestamp',
+    deleted_at TIMESTAMP NULL DEFAULT NULL COMMENT 'Timestamp of logical deletion (null if active)',
+    FOREIGN KEY (category_id) REFERENCES categories(id)
+);
+
+-- Table: orders
+CREATE TABLE orders (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary key: Unique order ID',
+    user_id INT NOT NULL COMMENT 'Foreign key referencing users(id)',
+    total_amount DECIMAL(10,2) NOT NULL COMMENT 'Total amount of the order',
+    discount DECIMAL(10,2) DEFAULT 0 COMMENT 'Commercial discount if applicable',
+    payment_status ENUM('pending', 'paid', 'refunded') DEFAULT 'pending' COMMENT 'Current status of the payment',
+    order_status ENUM('pending', 'processing', 'shipped', 'delivered') DEFAULT 'pending' COMMENT 'Current status of the order',
+    delivery_address TEXT NOT NULL COMMENT 'Delivery address for the order',
+    billing_address TEXT COMMENT 'Billing address (optional)',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Creation timestamp',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last update timestamp',
+    deleted_at TIMESTAMP NULL DEFAULT NULL COMMENT 'Timestamp of logical deletion (null if active)',
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Table: order_items
+CREATE TABLE order_items (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary key: Unique ID of order item',
+    order_id INT NOT NULL COMMENT 'Foreign key referencing orders(id)',
+    product_id INT NOT NULL COMMENT 'Foreign key referencing products(id)',
+    quantity INT NOT NULL COMMENT 'Quantity ordered of the product',
+    unit_price DECIMAL(10,2) NOT NULL COMMENT 'Unit price at the time of order',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Creation timestamp',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last update timestamp',
+    deleted_at TIMESTAMP NULL DEFAULT NULL COMMENT 'Timestamp of logical deletion (null if active)',
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
+-- Table: payments
+CREATE TABLE payments (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary key: Unique payment ID',
+    order_id INT NOT NULL COMMENT 'Foreign key referencing orders(id)',
+    amount DECIMAL(10,2) NOT NULL COMMENT 'Amount paid',
+    payment_method ENUM('credit_card', 'mobile_money', 'bank_transfer') NOT NULL COMMENT 'Method used for payment',
+    transaction_id VARCHAR(255) COMMENT 'External transaction reference ID',
+    operator_id VARCHAR(100) COMMENT 'ID of the mobile money/bank operator (optional)',
+    currency VARCHAR(10) DEFAULT 'XOF' COMMENT 'Currency used for the transaction',
+    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Date and time of payment',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Creation timestamp',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last update timestamp',
+    deleted_at TIMESTAMP NULL DEFAULT NULL COMMENT 'Timestamp of logical deletion (null if active)',
+    FOREIGN KEY (order_id) REFERENCES orders(id)
+);
+
+-- Table: notifications
+CREATE TABLE notifications (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary key: Unique notification ID',
+    notifiable_id INT NOT NULL COMMENT 'ID of the model being notified (user, company, etc.)',
+    notifiable_type VARCHAR(100) NOT NULL COMMENT 'Type of the notifiable model (User, Company, etc.)',
+    type VARCHAR(255) NOT NULL COMMENT 'Type or class of the notification (e.g. OrderShipped)',
+    data JSON NOT NULL COMMENT 'Notification payload data',
+    read_at TIMESTAMP NULL COMMENT 'Timestamp when the notification was read',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Creation timestamp',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last update timestamp',
+    deleted_at TIMESTAMP NULL DEFAULT NULL COMMENT 'Timestamp of logical deletion (null if active)'
+);
+
+-- Logs pour le débogage
+-- SELECT * FROM users WHERE deleted_at IS NULL; -- Pour voir tous les utilisateurs actifs
+-- SELECT * FROM orders WHERE payment_status = 'pending'; -- Pour voir les commandes non payées
+-- SELECT * FROM notifications WHERE notifiable_type = 'User' AND notifiable_id = 1; -- Notifications d'un utilisateur

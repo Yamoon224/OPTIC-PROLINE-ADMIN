@@ -1,0 +1,2 @@
+<img src="{{ asset('images/logo/light-menu.webp') }}" alt="LOGO WHITE" class="hidden h-6 mx-auto dark:block">
+<img src="{{ asset('images/logo/dark-menu.webp') }}" alt="LOGO DARK" class="block h-6 mx-auto dark:hidden">
