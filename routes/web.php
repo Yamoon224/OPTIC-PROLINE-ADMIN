@@ -2,17 +2,16 @@
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\OrderItemController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\NotificationController;
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -29,8 +28,9 @@ Route::get('/', [Controller::class, 'welcome'])->name('welcome');
 
 Route::get('/switch/{locale}/language', [Controller::class, 'switchLocale'])->name('locales.switch');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'locale'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
 
     Route::resource('companies', CompanyController::class);
     Route::resource('users', UserController::class);

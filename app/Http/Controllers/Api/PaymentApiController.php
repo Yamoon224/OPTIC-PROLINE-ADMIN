@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePaymentRequest;
 use App\Http\Requests\UpdatePaymentRequest;
-use App\Http\Resources\PaymentResource;
+use App\Resources\PaymentResource;
 use App\Repositories\PaymentRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 

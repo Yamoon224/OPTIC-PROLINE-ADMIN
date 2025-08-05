@@ -42,4 +42,12 @@ class Product extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    /**
+     * Get the order items for the product.
+     */
+    public function images()
+    {
+        return $this->hasMany(Image::class);
+    }
 }

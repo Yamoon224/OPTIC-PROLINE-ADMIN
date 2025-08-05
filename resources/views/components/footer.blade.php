@@ -4,8 +4,8 @@
         <div class="relative z-10 grid grid-cols-12 gap-5 xl:grid-cols-12">
             <div class="col-span-12 md:col-span-12 lg:col-span-12 xl:col-span-4">
                 <div class="mb-5">
-                    <a href="product-landing.html#!"><img src="{{ asset('images/logo/light.png') }}" alt="" class="hidden h-7 dark:block"></a>
-                    <a href="product-landing.html#!"><img src="{{ asset('images/logo/dark.png') }}" alt="" class="block h-7 dark:hidden"></a>
+                    <a href="product-landing.html#!"><img src="{{ asset('images/logo/light.webp') }}" alt="" class="hidden h-7 dark:block"></a>
+                    <a href="product-landing.html#!"><img src="{{ asset('images/logo/dark.webp') }}" alt="" class="block h-7 dark:hidden"></a>
                 </div>
                 <p class="mb-5 text-slate-500 dark:text-zinc-400">Premium Multipurpose Admin & Dashboard Template You can build any type of web application like eCommerce, CRM, CMS, Project management apps, Admin Panels, etc using Tailwick.</p>
                 <ul class="flex items-center gap-3">

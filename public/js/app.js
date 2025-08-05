@@ -853,7 +853,7 @@ function init() {
     resetLayout();
     updateHorizontalMenus();
     lightDarkMode();
-    initLanguage();
+    // initLanguage();
     initFilters();
     initMenuItemScroll()
 };

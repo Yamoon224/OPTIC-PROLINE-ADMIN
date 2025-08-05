@@ -30,6 +30,7 @@ class StoreUserRequest extends FormRequest
             'password' => ['required', 'string', 'min:8'],
             'phone' => ['nullable', 'string', 'max:20'],
             'role' => ['nullable', Rule::in(array_column(UserRoleEnum::cases(), 'value'))],
+            'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'], // max en Ko (2048 Ko = 2 Mo)
         ];
     }
 }

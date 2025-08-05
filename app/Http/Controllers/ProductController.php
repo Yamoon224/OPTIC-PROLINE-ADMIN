@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Repositories\ProductRepositoryInterface;
@@ -45,7 +47,8 @@ class ProductController extends Controller
     {
         $products = $this->productRepository->getAll();
         $categories = $this->categoryRepository->getAll();
-        return view('admin.products.index', compact('products', 'categories'));
+        $role = auth()->user()->role->value;
+        return view($role.'.products.index', compact('products', 'categories'));
     }
 
     /**
@@ -56,7 +59,7 @@ class ProductController extends Controller
     public function create()
     {
         $categories = $this->categoryRepository->getAll();
-        return view('admin.products.create', compact('categories'));
+        return view('admin.products.add', compact('categories'));
     }
 
     /**
@@ -67,7 +70,13 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        $this->productRepository->create($request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $data['image'] = 'storage/'.$request->file('image')->store('products/images', 'public'); // Stocke dans storage/app/public/companies/logo
+        }
+
+        $this->productRepository->create($data);
         return redirect()->route('products.index')->with('success', 'Produit créé avec succès.');
     }
 
@@ -115,7 +124,17 @@ class ProductController extends Controller
         if (!$product) {
             return redirect()->route('products.index')->with('error', 'Produit non trouvé.');
         }
-        $this->productRepository->update($product, $request->validated());
+
+        $productData = $request->validated();
+        // Vérifie si un logo a été uploadé
+        if ($request->hasFile('image')) {
+            $relativePath = str_replace('storage/', '', $product->image);
+            if (Str::startsWith($relativePath, 'products/images/') && Storage::disk('public')->exists($relativePath)) {
+                Storage::disk('public')->delete($relativePath);
+            }
+            $productData['image'] = 'storage/'.$request->file('image')->store('products/images', 'public'); // Stocke dans storage/app/public/users/photos
+        }
+        $this->productRepository->update($product, $productData);
         return redirect()->route('products.index')->with('success', 'Produit mis à jour avec succès.');
     }
 

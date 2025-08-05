@@ -16,7 +16,7 @@ class ProductRepository implements ProductRepositoryInterface
      */
     public function getAll(): Collection
     {
-        return Product::all();
+        return Product::with('category')->orderByDesc('id')->get();
     }
 
     /**

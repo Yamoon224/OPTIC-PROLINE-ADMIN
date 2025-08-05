@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreUserRequest;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdateUserRequest;
 use App\Repositories\UserRepositoryInterface;
 use App\Repositories\CompanyRepositoryInterface; // Pour récupérer les entreprises
@@ -44,7 +47,8 @@ class UserController extends Controller
     public function index()
     {
         $users = $this->userRepository->getAll(); // Récupère tous les utilisateurs
-        return view('users.index', compact('users'));
+        $companies = $this->companyRepository->getAll();
+        return view('admin.users.index', compact('users', 'companies'));
     }
 
     /**
@@ -55,7 +59,7 @@ class UserController extends Controller
     public function create()
     {
         $companies = $this->companyRepository->getAll(); // Récupère toutes les entreprises
-        return view('users.create', compact('companies'));
+        return view('admin.users.create', compact('companies'));
     }
 
     /**
@@ -67,6 +71,9 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
         $userData = $request->validated();
+        if ($request->hasFile('photo')) {
+            $userData['photo'] = 'storage/'.$request->file('photo')->store('users/photos', 'public'); // Stocke dans storage/app/public/users/photos
+        }
         $this->userRepository->create($userData);
         return redirect()->route('users.index')->with('success', 'Utilisateur créé avec succès.');
     }
@@ -83,7 +90,7 @@ class UserController extends Controller
         if (!$user) {
             return redirect()->route('users.index')->with('error', 'Utilisateur non trouvé.');
         }
-        return view('users.show', compact('user'));
+        return view('admin.users.show', compact('user'));
     }
 
     /**
@@ -99,7 +106,7 @@ class UserController extends Controller
             return redirect()->route('users.index')->with('error', 'Utilisateur non trouvé.');
         }
         $companies = $this->companyRepository->getAll();
-        return view('users.edit', compact('user', 'companies'));
+        return view('admin.users.edit', compact('user', 'companies'));
     }
 
     /**
@@ -118,9 +125,21 @@ class UserController extends Controller
         $userData = $request->validated();
         if (isset($userData['password']) && empty($userData['password'])) {
             unset($userData['password']); // Ne pas mettre à jour le mot de passe s'il est vide
+        } else if(!empty($userData['password'])) {
+            unset($userData['password_confirmation']);
+            $userData['password'] = Hash::make($userData['password']);
+        }
+
+        // Vérifie si un logo a été uploadé
+        if ($request->hasFile('photo')) {
+            $relativePath = str_replace('storage/', '', $user->photo);
+            if (Str::startsWith($relativePath, 'users/photos/') && Storage::disk('public')->exists($relativePath)) {
+                Storage::disk('public')->delete($relativePath);
+            }
+            $userData['photo'] = 'storage/'.$request->file('photo')->store('users/photos', 'public'); // Stocke dans storage/app/public/users/photos
         }
         $this->userRepository->update($user, $userData);
-        return redirect()->route('users.index')->with('success', 'Utilisateur mis à jour avec succès.');
+        return redirect()->back()->with('success', 'Utilisateur mis à jour avec succès.');
     }
 
     /**

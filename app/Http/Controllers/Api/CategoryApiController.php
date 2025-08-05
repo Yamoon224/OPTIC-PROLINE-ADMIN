@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
-use App\Http\Resources\CategoryResource;
+use App\Resources\CategoryResource;
 use App\Repositories\CategoryRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 

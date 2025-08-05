@@ -44,7 +44,7 @@ class OrderController extends Controller
     public function index()
     {
         $orders = $this->orderRepository->getAll();
-        return view('orders.index', compact('orders'));
+        return view('admin.orders.index', compact('orders'));
     }
 
     /**
@@ -55,7 +55,7 @@ class OrderController extends Controller
     public function create()
     {
         $users = $this->userRepository->getAll();
-        return view('orders.create', compact('users'));
+        return view('admin.orders.create', compact('users'));
     }
 
     /**
@@ -82,7 +82,7 @@ class OrderController extends Controller
         if (!$order) {
             return redirect()->route('orders.index')->with('error', 'Commande non trouvée.');
         }
-        return view('orders.show', compact('order'));
+        return view('admin.orders.show', compact('order'));
     }
 
     /**
@@ -98,7 +98,7 @@ class OrderController extends Controller
             return redirect()->route('orders.index')->with('error', 'Commande non trouvée.');
         }
         $users = $this->userRepository->getAll();
-        return view('orders.edit', compact('order', 'users'));
+        return view('admin.orders.edit', compact('order', 'users'));
     }
 
     /**

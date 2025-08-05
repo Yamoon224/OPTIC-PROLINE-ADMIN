@@ -7,7 +7,7 @@ File: Form file upload Js File
 */
 
 // Dropzone
-var dropzonePreviewNode = document.querySelector("#dropzone-preview-list");
+var dropzonePreviewNode = document.querySelector(".dropzone-preview-list");
 dropzonePreviewNode.id = "";
 if (dropzonePreviewNode) {
     var previewTemplate = dropzonePreviewNode.parentNode.innerHTML;
@@ -16,20 +16,20 @@ if (dropzonePreviewNode) {
         url: 'https://httpbin.org/post',
         method: "post",
         previewTemplate: previewTemplate,
-        previewsContainer: "#dropzone-preview",
+        previewsContainer: ".dropzone-preview",
     });
 }
 
 // Dropzone
-var dropzonePreviewNode = document.querySelector("#dropzone-preview-list2");
-dropzonePreviewNode.id = "";
-if (dropzonePreviewNode) {
-    var previewTemplate = dropzonePreviewNode.parentNode.innerHTML;
-    dropzonePreviewNode.parentNode.removeChild(dropzonePreviewNode);
-    var dropzone = new Dropzone(".dropzone2", {
-        url: 'https://httpbin.org/post',
-        method: "post",
-        previewTemplate: previewTemplate,
-        previewsContainer: "#dropzone-preview2",
-    });
-}
+// var dropzonePreviewNode = document.querySelector("#dropzone-preview-list2");
+// dropzonePreviewNode.id = "";
+// if (dropzonePreviewNode) {
+//     var previewTemplate = dropzonePreviewNode.parentNode.innerHTML;
+//     dropzonePreviewNode.parentNode.removeChild(dropzonePreviewNode);
+//     var dropzone = new Dropzone(".dropzone2", {
+//         url: 'https://httpbin.org/post',
+//         method: "post",
+//         previewTemplate: previewTemplate,
+//         previewsContainer: "#dropzone-preview2",
+//     });
+// }

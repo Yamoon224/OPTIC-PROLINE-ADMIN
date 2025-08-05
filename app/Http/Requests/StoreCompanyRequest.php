@@ -24,9 +24,10 @@ class StoreCompanyRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'register_id' => ['nullable', 'string', 'max:255', 'unique:companies,register_id'], // Nouvelle règle
-            'address' => ['required', 'string', 'max:255'],                                     // Nouvelle règle
-            'contact' => ['required', 'string', 'max:255'],                                     // Nouvelle règle
+            'register_id' => ['nullable', 'string', 'max:255', 'unique:companies,register_id'],
+            'address' => ['required', 'string', 'max:255'],
+            'contact' => ['required', 'string', 'max:255'],
+            'logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'], // max en Ko (2048 Ko = 2 Mo)
         ];
     }
 }

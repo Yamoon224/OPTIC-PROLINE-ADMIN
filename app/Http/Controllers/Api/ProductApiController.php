@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\JsonResponse;
+use App\Resources\ProductResource;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use App\Http\Resources\ProductResource;
 use App\Repositories\ProductRepositoryInterface;
-use Illuminate\Http\JsonResponse;
 
 class ProductApiController extends Controller
 {

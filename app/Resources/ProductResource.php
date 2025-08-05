@@ -1,9 +1,10 @@
 <?php
 
 // ProductResource.php
-namespace App\Http\Resources;
+namespace App\Resources;
 
 use Illuminate\Http\Request;
+use App\Enums\ProductStatusEnum;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends JsonResource
@@ -13,7 +14,7 @@ class ProductResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray(Request $request): array 
     {
         return [
             'id' => $this->id,
@@ -28,11 +29,12 @@ class ProductResource extends JsonResource
             'gender' => $this->gender,
             'shape' => $this->shape,
             'color' => $this->color,
+            'image' => env('APP_URL') . '/' . $this->image,
             'category_id' => $this->category_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'category' => new CategoryResource($this->whenLoaded('category')),
-            'is_in_stock' => $this->status === 'in_stock',
+            'is_in_stock' => $this->status == ProductStatusEnum::InStock,
             'formatted_price' => number_format($this->unit_price, 0, ',', ' ') . ' XOF',
         ];
     }

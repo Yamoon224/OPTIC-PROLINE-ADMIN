@@ -15,7 +15,7 @@
             <div class="flex flex-col gap-4">
                 <div class="flex gap-2 product">
                     <div class="flex items-center justify-center w-12 h-12 rounded-md bg-slate-100 shrink-0 dark:bg-zink-500">
-                        <img src="assets/images/img-012.png" alt="" class="h-8">
+                        <img src="{{ asset('images/img-012.png') }}" alt="" class="h-8">
                     </div>
                     <div class="overflow-hidden grow">
                         <div class="ltr:float-right rtl:float-left">
@@ -40,7 +40,7 @@
                 </div>
                 <div class="flex gap-2 product">
                     <div class="flex items-center justify-center w-12 h-12 rounded-md bg-slate-100 shrink-0 dark:bg-zink-500">
-                        <img src="assets/images/img-03.png" alt="" class="h-8">
+                        <img src="{{ asset('images/img-03.png') }}" alt="" class="h-8">
                     </div>
                     <div class="overflow-hidden grow">
                         <div class="ltr:float-right rtl:float-left">
@@ -65,7 +65,7 @@
                 </div>
                 <div class="flex gap-2 product">
                     <div class="flex items-center justify-center w-12 h-12 rounded-md bg-slate-100 shrink-0 dark:bg-zink-500">
-                        <img src="assets/images/img-09.png" alt="" class="h-8">
+                        <img src="{{ asset('images/img-09.png') }}" alt="" class="h-8">
                     </div>
                     <div class="overflow-hidden grow">
                         <div class="ltr:float-right rtl:float-left">

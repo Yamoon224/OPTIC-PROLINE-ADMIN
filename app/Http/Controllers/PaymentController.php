@@ -44,7 +44,7 @@ class PaymentController extends Controller
     public function index()
     {
         $payments = $this->paymentRepository->getAll();
-        return view('payments.index', compact('payments'));
+        return view('admin.payments.index', compact('payments'));
     }
 
     /**
@@ -55,7 +55,7 @@ class PaymentController extends Controller
     public function create()
     {
         $orders = $this->orderRepository->getAll();
-        return view('payments.create', compact('orders'));
+        return view('admin.payments.create', compact('orders'));
     }
 
     /**
@@ -82,7 +82,7 @@ class PaymentController extends Controller
         if (!$payment) {
             return redirect()->route('payments.index')->with('error', 'Paiement non trouvé.');
         }
-        return view('payments.show', compact('payment'));
+        return view('admin.payments.show', compact('payment'));
     }
 
     /**
@@ -98,7 +98,7 @@ class PaymentController extends Controller
             return redirect()->route('payments.index')->with('error', 'Paiement non trouvé.');
         }
         $orders = $this->orderRepository->getAll();
-        return view('payments.edit', compact('payment', 'orders'));
+        return view('admin.payments.edit', compact('payment', 'orders'));
     }
 
     /**

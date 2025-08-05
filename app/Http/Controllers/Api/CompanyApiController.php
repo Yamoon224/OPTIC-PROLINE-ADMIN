@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
-use App\Http\Resources\CompanyResource;
+use App\Resources\CompanyResource;
 use Illuminate\Http\JsonResponse;
 
 class CompanyApiController extends Controller

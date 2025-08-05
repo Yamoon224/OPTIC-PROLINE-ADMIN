@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreOrderItemRequest;
 use App\Http\Requests\UpdateOrderItemRequest;
-use App\Http\Resources\OrderItemResource;
+use App\Resources\OrderItemResource;
 use App\Repositories\OrderItemRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Notification;
 use App\Http\Requests\StoreNotificationRequest;
 use App\Http\Requests\UpdateNotificationRequest;
-use App\Http\Resources\NotificationResource;
+use App\Resources\NotificationResource;
 use Illuminate\Http\JsonResponse;
 
 class NotificationApiController extends Controller

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Company;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
-use Illuminate\Http\Request;
 
 class CompanyController extends Controller
 {
@@ -31,7 +33,15 @@ class CompanyController extends Controller
      */
     public function store(StoreCompanyRequest $request)
     {
-        Company::create($request->validated());
+        $data = $request->validated();
+
+        // Vérifie si un logo a été uploadé
+        if ($request->hasFile('logo')) {
+            $data['logo'] = 'storage/'.$request->file('logo')->store('companies/logo', 'public'); // Stocke dans storage/app/public/companies/logo
+        }
+
+        Company::create($data);
+
         return redirect()->route('companies.index')->with('success', 'Company created successfully.');
     }
 
@@ -56,7 +66,19 @@ class CompanyController extends Controller
      */
     public function update(UpdateCompanyRequest $request, Company $company)
     {
-        $company->update($request->validated());
+        $data = $request->validated();
+
+        // Vérifie si un logo a été uploadé
+        if ($request->hasFile('logo')) {
+            $relativePath = str_replace('storage/', '', $company->logo);
+            if (Str::startsWith($relativePath, 'companies/logo/') && Storage::disk('public')->exists($relativePath)) {
+                Storage::disk('public')->delete($relativePath);
+            }
+
+            $data['logo'] = 'storage/'.$request->file('logo')->store('companies/logo', 'public'); // Stocke dans storage/app/public/companies/logo
+        }
+
+        $company->update($data);
         return redirect()->route('companies.index')->with('success', 'Company updated successfully.');
     }
 
@@ -65,6 +87,10 @@ class CompanyController extends Controller
      */
     public function destroy(Company $company)
     {
+        if ($company->logo && Storage::disk('public')->exists($company->logo)) {
+            Storage::disk('public')->delete($company->logo);
+        }
+        
         $company->delete(); // Soft delete
         return redirect()->route('companies.index')->with('success', 'Company deleted successfully.');
     }
