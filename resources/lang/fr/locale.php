@@ -94,6 +94,16 @@
         'order_id' => 'ID de commande',
         'product_image' => "Image du Produit",
 
+        'wiew_orders' => 'Voir Toutes Commandes',
+        'total_revenue' => 'Total Revenus',
+        'total_orders' => 'Total Commandes',
+        'total_sales' => 'Total Ventes',
+        'total_profit' => 'Total Profit',
+        'delivered' => 'Commandes Livrées',
+        'top_selling_products' => 'Top Produits Vendus',
+        'sale_revenue_overview' => 'Revenus Ventes',
+        'top_providers' => 'Top Fournisseurs',
+
         'credit_card' => 'Carte de crédit',
         'mobile_money' => 'Mobile Money',
         'bank_transfer' => 'Virement bancaire',

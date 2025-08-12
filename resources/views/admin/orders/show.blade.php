@@ -1,4 +1,4 @@
-<x-app-layout :pagename="__('locale.order') . ' #' . $order->id">
+<x-app-layout :pagename="__('locale.order', ['suffix'=>'']) . ' #' . $order->id">
     <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-6 gap-6 mb-6">
         {{-- Shipping Details --}}
         <div class="2xl:col-span-3 bg-white rounded-xl shadow p-5">
@@ -115,14 +115,14 @@
                                                     </h6>
                                                     <p class="text-slate-500 dark:text-zinc-200">
                                                         {{-- Quantité x Prix unitaire --}}
-                                                        ${{ number_format($item->product->unit_price, 2) }} x {{ $item->quantity }}
+                                                        {{ number_format($item->product->unit_price, 2) }} x {{ $item->quantity }}
                                                     </p>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="px-3.5 py-4 border-b border-dashed first:pl-0 last:pr-0 border-slate-200 dark:border-zink-500 ltr:text-right rtl:text-left">
                                             {{-- Total ligne = unit_price x quantité --}}
-                                            ${{ number_format($item->product->unit_price * $item->quantity, 2) }}
+                                            {{ number_format($item->product->unit_price * $item->quantity, 2) }}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -133,7 +133,7 @@
                                         @lang('locale.subtotal')
                                     </td>
                                     <td class="px-3.5 pt-4 pb-3 first:pl-0 last:pr-0 ltr:text-right rtl:text-left">
-                                        ${{ number_format($order->amount, 2) }}
+                                        {{ number_format($order->amount, 2) }}
                                     </td>
                                 </tr>
             
@@ -143,7 +143,7 @@
                                         @lang('locale.discount')
                                     </td>
                                     <td class="px-3.5 py-3 first:pl-0 last:pr-0 ltr:text-right rtl:text-left">
-                                        -${{ number_format($order->discount ?? 0, 2) }}
+                                        - {{ number_format($order->discount ?? 0, 2) }}
                                     </td>
                                 </tr>
             
@@ -153,7 +153,7 @@
                                         @lang('locale.total')
                                     </td>
                                     <td class="px-3.5 pt-3 first:pl-0 last:pr-0 ltr:text-right rtl:text-left">
-                                        ${{ number_format($order->amount - ($order->discount ?? 0), 2) }}
+                                        {{ number_format($order->amount - ($order->discount ?? 0), 2) }}
                                     </td>
                                 </tr>
                             </tbody>
@@ -164,7 +164,7 @@
         </div>
 
         {{-- Sidebar : tracking / documents --}}
-        <div class="2xl:col-span-3 space-y-6">
+        {{-- <div class="2xl:col-span-3 space-y-6">
             <div class="bg-white rounded-xl shadow p-5">
                 <h6 class="text-15 font-semibold mb-2">@lang('locale.tracking')</h6>
                 @if ($order->tracking_id)
@@ -173,6 +173,6 @@
                     <p class="text-slate-500 italic">@lang('locale.no_tracking')</p>
                 @endif
             </div>
-        </div>
+        </div> --}}
     </div>
 </x-app-layout>

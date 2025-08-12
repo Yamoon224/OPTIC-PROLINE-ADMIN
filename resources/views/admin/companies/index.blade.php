@@ -9,14 +9,14 @@
     <div class="card">
         <div class="border-b border-custom-200 flex items-center justify-between p-4">
             <h4 class="text-18">@lang('locale.company', ['suffix'=>app()->getLocale() == 'en' ? 'ies' : 's'])</h4>
-            <button 
-                data-modal-target="add-company" 
-                type="button" 
+            <a 
+                href="{{ route('companies.create') }}"
+                role="button" 
                 class="text-sm px-3 py-1.5 flex items-center gap-2 rounded-md text-white btn bg-custom-500 border-custom-500 hover:bg-custom-600 focus:ring focus:ring-custom-100 focus:outline-none"
             >
                 <i data-lucide="plus" class="w-4 h-4"></i>
                 @lang('locale.add_company')
-            </button>
+            </a>
         </div>
 
         <div class="card-body">
@@ -36,27 +36,27 @@
                         @foreach ($companies as $company)
                         <tr>
                             <td class="px-3.5 py-1 first:pl-5 last:pr-5 border-y border-slate-200 dark:border-zink-500">{{ $loop->iteration }}</td>
-                            <td class="px-3.5 py-1 first:pl-5 last:pr-5 border-y border-slate-200 dark:border-zink-500">{{ $company->name }}</td>
+                            <td class="px-3.5 py-1 first:pl-5 last:pr-5 border-y border-slate-200 dark:border-zink-500">
+                                <a href="{{ route('companies.show', $company->id) }}" class="flex items-center gap-3">
+                                    <div class="w-6 h-6 rounded-full shrink-0 bg-slate-100">
+                                        <img src="{{ asset($company->logo) }}" alt="LOGO" class="h-6 rounded-full">
+                                    </div>
+                                    <h6 class="grow">{{ $company->name }}</h6>
+                                </a>
+                            </td>
                             <td class="px-3.5 py-1 first:pl-5 last:pr-5 border-y border-slate-200 dark:border-zink-500">{{ $company->register_id ?? '-' }}</td>
                             <td class="px-3.5 py-1 first:pl-5 last:pr-5 border-y border-slate-200 dark:border-zink-500">{{ $company->address }}</td>
                             <td class="px-3.5 py-1 first:pl-5 last:pr-5 border-y border-slate-200 dark:border-zink-500">{{ $company->contact }}</td>
                             <td class="px-3.5 py-1 first:pl-5 last:pr-5 border-y border-slate-200 dark:border-zink-500">
                                 <div class="flex gap-2">
                                     <!-- Edit button -->
-                                    <button 
-                                        type="button"
-                                        aria-label="Edit"
+                                    <a 
+                                        role="button"
                                         class="w-8 h-8 flex items-center justify-center text-white btn bg-custom-500 hover:bg-custom-600 focus:ring focus:ring-custom-100 focus:outline-none dark:ring-custom-400/20 rounded-[10px]"
-                                        data-modal-target="edit-company"
-                                        data-id="{{ $company->id }}"
-                                        data-name="{{ $company->name }}"
-                                        data-register_id="{{ $company->register_id }}"
-                                        data-address="{{ $company->address }}"
-                                        data-contact="{{ $company->contact }}"
-                                        onclick="openEditCompanyModal(this)"
+                                        href="{{ route('companies.edit', $company->id) }}"
                                     >
                                         <i class="ri-edit-line text-base"></i>
-                                    </button>
+                                    </a>
 
                                     <!-- Delete form -->
                                     <form action="{{ route('companies.destroy', $company->id) }}" method="post" 
@@ -79,12 +79,6 @@
         </div>
     </div>
 
-    {{-- Modal add-company --}}
-    @include('admin.companies.modals.add')
-
-    {{-- Modal edit-company --}}
-    @include('admin.companies.modals.edit')
-
     @push('scripts')
         <!-- jQuery and DataTables scripts -->
         <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
@@ -100,9 +94,6 @@
         <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
         <script src="{{ asset('js/datatables.js') }}"></script>
 
-        <script src="{{ asset('libs/dropzone/dropzone-min.js') }}"></script>
-        <script src="{{ asset('js/pages/form-file-upload.init.js') }}"></script>
-
         <script>
             $(function () {
                 $('#companiesTable').DataTable({
@@ -112,20 +103,6 @@
                     pageLength: 10
                 });
             });
-
-            function openEditCompanyModal(button) {
-                const id = button.dataset.id;
-                const baseUrl = document.querySelector('meta[name="app-url"]').getAttribute('content');
-                const form = document.getElementById('edit-company-form');
-
-                form.action = `${baseUrl}/companies/${id}`;
-                form.querySelector('#edit_name').value = button.dataset.name || '';
-                form.querySelector('#edit_register_id').value = button.dataset.register_id || '';
-                form.querySelector('#edit_address').value = button.dataset.address || '';
-                form.querySelector('#edit_contact').value = button.dataset.contact || '';
-
-                document.getElementById('edit-company').classList.remove('hidden');
-            }
         </script>
     @endpush
 </x-app-layout>

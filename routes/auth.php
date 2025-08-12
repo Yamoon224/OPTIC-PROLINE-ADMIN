@@ -15,8 +15,8 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
     Route::post('register', [RegisteredUserController::class, 'store']);
 
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])->middleware('locale')->name('login');
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    Route::get('/', [AuthenticatedSessionController::class, 'create'])->middleware('locale')->name('welcome');
+    Route::post('login', [AuthenticatedSessionController::class, 'store'])->name('login');
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])->name('password.request');
     Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');

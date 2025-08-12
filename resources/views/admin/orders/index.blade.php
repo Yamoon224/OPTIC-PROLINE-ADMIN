@@ -5,6 +5,48 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" />
     @endpush
 
+    <div class="grid grid-cols-1 gap-x-5 md:grid-cols-2 xl:grid-cols-12 mb-1">
+        <div class="xl:col-span-4">
+            <div class="card">
+                <div class="flex items-center gap-4 card-body">
+                    <div class="flex items-center justify-center bg-yellow-100 text-yellow-600 rounded-md size-12 text-15 dark:bg-red-500/20 shrink-0">
+                        <i data-lucide="user-x-2"></i>
+                    </div>
+                    <div class="overflow-hidden grow">
+                        <h5 class="mb-1 text-16"><span class="counter-value" data-target="2">2</span></h5>
+                        <p class="truncate text-slate-500 dark:text-zink-200">@lang('locale.on_demand')</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="xl:col-span-4">
+            <div class="card">
+                <div class="flex items-center gap-4 card-body">
+                    <div class="flex items-center justify-center bg-yellow-100 text-yellow-600 rounded-md size-12 text-15 dark:bg-red-500/20 shrink-0">
+                        <i data-lucide="user-x-2"></i>
+                    </div>
+                    <div class="overflow-hidden grow">
+                        <h5 class="mb-1 text-16"><span class="counter-value" data-target="2">2</span></h5>
+                        <p class="truncate text-slate-500 dark:text-zink-200">@lang('locale.on_demand')</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="xl:col-span-4">
+            <div class="card">
+                <div class="flex items-center gap-4 card-body">
+                    <div class="flex items-center justify-center text-green-500 bg-green-100 rounded-md size-12 text-15 dark:bg-green-500/20 shrink-0">
+                        <i data-lucide="user-check-2"></i>
+                    </div>
+                    <div class="overflow-hidden grow">
+                        <h5 class="mb-1 text-16"><span class="counter-value" data-target="12">12</span></h5>
+                        <p class="truncate text-slate-500 dark:text-zink-200">@lang('locale.in_stock')</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="card">
         <div class="border-b border-custom-200 flex items-center justify-between p-4">
             <h4 class="text-18">@lang('locale.order', ['suffix'=>'s'])</h4>

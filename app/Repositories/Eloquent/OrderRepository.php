@@ -16,7 +16,7 @@ class OrderRepository implements OrderRepositoryInterface
      */
     public function getAll(): Collection
     {
-        return Order::with('order_items')->orderByDesc('id')->get();
+        return Order::with('orderItems')->orderByDesc('id')->get();
     }
 
     /**

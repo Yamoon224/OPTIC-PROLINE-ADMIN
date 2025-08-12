@@ -4,19 +4,37 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreCompanyRequest;
 use App\Http\Requests\UpdateCompanyRequest;
+use App\Repositories\CompanyRepositoryInterface;
 
 class CompanyController extends Controller
 {
+    /**
+     * L'instance du repository de la catégorie.
+     *
+     * @var CompanyRepositoryInterface
+     */
+    protected $companyRepository;
+
+    /**
+     * Crée une nouvelle instance du contrôleur.
+     *
+     * @param CompanyRepositoryInterface $companyRepository
+     * @return void
+     */
+    public function __construct(CompanyRepositoryInterface $companyRepository)
+    {
+        $this->companyRepository = $companyRepository;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $companies = Company::all();
+        $companies = $this->companyRepository->getAll();
         return view('admin.companies.index', compact('companies'));
     }
 
@@ -25,7 +43,7 @@ class CompanyController extends Controller
      */
     public function create()
     {
-        return view('admin.companies.create');
+        return view('admin.companies.add');
     }
 
     /**
@@ -40,7 +58,7 @@ class CompanyController extends Controller
             $data['logo'] = 'storage/'.$request->file('logo')->store('companies/logo', 'public'); // Stocke dans storage/app/public/companies/logo
         }
 
-        Company::create($data);
+        $this->companyRepository->create($data);
 
         return redirect()->route('companies.index')->with('success', 'Company created successfully.');
     }
@@ -48,28 +66,36 @@ class CompanyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Company $company)
+    public function show(int $id)
     {
-        return view('companies.show', compact('company'));
+        $company = $this->companyRepository->findById($id);
+        return view('admin.companies.show', compact('company'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Company $company)
+    public function edit(int $id)
     {
+        $company = $this->companyRepository->findById($id);
+        if (!$company) {
+            return redirect()->route('companies.index')->with('error', 'Produit non trouvé.');
+        }
         return view('admin.companies.edit', compact('company'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCompanyRequest $request, Company $company)
+    public function update(UpdateCompanyRequest $request, int $id)
     {
         $data = $request->validated();
 
+        $company = $this->companyRepository->findById($id);
+
         // Vérifie si un logo a été uploadé
         if ($request->hasFile('logo')) {
+            dump($company);
             $relativePath = str_replace('storage/', '', $company->logo);
             if (Str::startsWith($relativePath, 'companies/logo/') && Storage::disk('public')->exists($relativePath)) {
                 Storage::disk('public')->delete($relativePath);
@@ -78,20 +104,22 @@ class CompanyController extends Controller
             $data['logo'] = 'storage/'.$request->file('logo')->store('companies/logo', 'public'); // Stocke dans storage/app/public/companies/logo
         }
 
-        $company->update($data);
+        $this->companyRepository->update($company, $data);
         return redirect()->route('companies.index')->with('success', 'Company updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Company $company)
+    public function destroy(int $id)
     {
+        $company = $this->companyRepository->findById($id);
+
         if ($company->logo && Storage::disk('public')->exists($company->logo)) {
             Storage::disk('public')->delete($company->logo);
         }
         
-        $company->delete(); // Soft delete
+        $this->companyRepository->delete($company); // Soft delete
         return redirect()->route('companies.index')->with('success', 'Company deleted successfully.');
     }
 }

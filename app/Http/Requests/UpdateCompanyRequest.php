@@ -23,9 +23,10 @@ class UpdateCompanyRequest extends FormRequest
     {
         return [
             'name' => ['sometimes', 'required', 'string', 'max:255'],
-            'register_id' => ['nullable', 'string', 'max:255', 'unique:companies,register_id,' . $this->company->id], // Nouvelle règle
+            'register_id' => ['nullable', 'string', 'max:255'], // Nouvelle règle
             'address' => ['sometimes', 'required', 'string', 'max:255'],                                     // Nouvelle règle
             'contact' => ['sometimes', 'required', 'string', 'max:255'],                                     // Nouvelle règle
+            'logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'], // max en Ko (2048 Ko = 2 Mo)
         ];
     }
 }

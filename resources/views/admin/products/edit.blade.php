@@ -1,6 +1,5 @@
 <x-app-layout :pagename="__('locale.edit_product')">
 
-
     <div class="card">
         <div class="border-b border-custom-200 flex items-center justify-between p-4">
             <h4 class="text-18">@lang('locale.edit_product')</h4>
@@ -8,86 +7,168 @@
 
         <div class="card-body">
             <div class="overflow-x-auto w-full">
-                <form id="edit-product-form" method="POST" action="{{ route('products.update', ['product' => $product->id]) }}" enctype="multipart/form-data">
+                <form id="edit-product-form" method="POST" action="{{ route('products.update', $product->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
     
+                    <input type="hidden" name="_previous" value="{{ route('products.index') }}">
                     <!-- Nom du produit -->
-                    <div class="mb-4">
-                        <label for="edit_name" class="inline-block mb-2 text-base font-medium">@lang('locale.product_name') <span class="text-red-500">*</span></label>
-                        <input type="text" id="edit_name" value="{{ $product->name }}" name="name" required class="form-input w-full" />
-                    </div>
-    
-                    <!-- Prix unitaire & prix de lot -->
-                    <div class="flex flex-wrap gap-4 mb-4">
-                        <div class="w-full md:w-1/2">
-                            <label for="edit_unit_price" class="mb-2 text-base font-medium">@lang('locale.unit_price') <span class="text-red-500">*</span></label>
-                            <input type="number" id="edit_unit_price" value="{{ $product->unit_price }}" name="unit_price" step="0.01" min="0" required class="form-input w-full" />
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="relative">
+                            <label for="edit_name" class="block mb-2">@lang('locale.product_name') <span class="text-red-500">*</span></label>
+                            <!-- Icône produit (tag) -->
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="lucide lucide-tag absolute size-4 ltr:left-3 rtl:right-3 top-1/2 translate-y-1/2 text-slate-500 dark:text-zink-200"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M20.59 13.41a2 2 0 0 1 0 2.83l-4.17 4.17a2 2 0 0 1-2.83 0L3 10V3h7z"></path>
+                                <circle cx="7.5" cy="7.5" r="1.5"></circle>
+                            </svg>
+                            <input type="text" id="edit_name" value="{{ $product->name }}" name="name" required class="ltr:pl-10 rtl:pr-10 form-input w-full" />
                         </div>
-                        <div class="w-full md:w-1/2">
-                            <label for="edit_batch_price" class="mb-2 text-base font-medium">@lang('locale.batch_price')</label>
-                            <input type="number" id="edit_batch_price" name="batch_price" value="{{ $product->batch_price }}" step="0.01" min="0" class="form-input w-full" />
-                        </div>
-                    </div>
-    
-                    <!-- Quantité en stock & statut -->
-                    <div class="flex flex-wrap gap-4 mb-4">
-                        <div class="w-full md:w-1/2">
-                            <label for="edit_stock_quantity" class="mb-2 text-base font-medium">@lang('locale.stock_quantity')</label>
-                            <input type="number" id="edit_stock_quantity" name="stock_quantity" value="{{ $product->stock_quantity }}" min="0" class="form-input w-full" />
-                        </div>
-                        <div class="w-full md:w-1/2">
-                            <label for="edit_status" class="mb-2 text-base font-medium">@lang('locale.status')</label>
-                            <select id="edit_status" name="status" class="form-select w-full">
-                                @foreach(App\Enums\ProductStatusEnum::cases() as $status)
-                                    <option value="{{ $status->value }}">@lang('locale.' . $status->value)</option>
+                        <!-- Catégorie -->
+                        <div class="relative">
+                            <label for="edit_category_id" class="block mb-2">@lang('locale.category', ['suffix'=>app()->getLocale() == 'en' ? 'y' : ''])</label>
+                            <!-- Icône catégorie (tag) -->
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="lucide lucide-tag absolute size-4 ltr:left-3 rtl:right-3 top-1/2 translate-y-1/2 text-slate-500 dark:text-zink-200"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M20.59 13.41a2 2 0 0 1 0 2.83l-4.17 4.17a2 2 0 0 1-2.83 0L3 10V3h7z"></path>
+                                <circle cx="7.5" cy="7.5" r="1.5"></circle>
+                            </svg>
+                            <select id="edit_category_id" name="category_id" class="ltr:pl-10 rtl:pr-10 form-select w-full">
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
-    
-                    <!-- Marque, matière -->
-                    <div class="flex flex-wrap gap-4 mb-4">
-                        <div class="w-full md:w-1/2">
-                            <label for="edit_brand" class="mb-2 text-base font-medium">@lang('locale.brand')</label>
-                            <input type="text" id="edit_brand" value="{{ $product->brand }}" name="brand" class="form-input w-full" />
+
+                    <!-- Prix unitaire & prix de lot -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="relative">
+                            <label for="edit_unit_price" class="mb-2 text-base font-medium">@lang('locale.unit_price') <span class="text-red-500">*</span></label>
+                            <!-- Icône dollar -->
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="lucide lucide-dollar-sign absolute size-5 ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-zink-200"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                            <input type="number" id="edit_unit_price" value="{{ $product->unit_price }}" name="unit_price" step="0.01" min="0" required class="ltr:pl-10 rtl:pr-10 form-input w-full" />
                         </div>
-                        <div class="w-full md:w-1/2">
-                            <label for="edit_material" class="mb-2 text-base font-medium">@lang('locale.material')</label>
-                            <input type="text" id="edit_material" value="{{ $product->material }}" name="material" class="form-input w-full" />
+                        <div class="relative">
+                            <label for="edit_batch_price" class="mb-2 text-base font-medium">@lang('locale.batch_price')</label>
+                            <!-- Icône box -->
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="lucide lucide-box absolute size-5 ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-zink-200"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l1-0.57"></path>
+                                <path d="M16 12v6"></path>
+                                <path d="M8 12v6"></path>
+                            </svg>
+                            <input type="number" id="edit_batch_price" name="batch_price" value="{{ $product->batch_price }}" step="0.01" min="0" class="ltr:pl-10 rtl:pr-10 form-input w-full" />
                         </div>
                     </div>
-    
-                    <!-- Genre, forme, couleur -->
-                    <div class="flex flex-wrap gap-4 mb-4">
-                        <div class="w-full md:w-1/3">
-                            <label for="edit_gender" class="mb-2 text-base font-medium">@lang('locale.gender')</label>
-                            <select id="edit_gender" name="gender" class="form-select w-full">
-                                <option value="">@lang('locale.choose')</option>
-                                <option value="men">@lang('locale.men')</option>
-                                <option value="women">@lang('locale.women')</option>
-                                <option value="unisex">@lang('locale.unisex')</option>
-                                <option value="kids">@lang('locale.kids')</option>
+
+                    <!-- Quantité en stock & statut -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="relative">
+                            <label for="edit_stock_quantity" class="mb-2 text-base font-medium">@lang('locale.stock_quantity')</label>
+                            <!-- Icône stock (archive) -->
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="lucide lucide-archive absolute size-5 ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-zink-200"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="4" rx="2" ry="2"/>
+                                <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"/>
+                                <line x1="10" y1="12" x2="14" y2="12"/>
+                            </svg>
+                            <input type="number" id="edit_stock_quantity" name="stock_quantity" value="{{ $product->stock_quantity }}" min="0" class="ltr:pl-10 rtl:pr-10 form-input w-full" />
+                        </div>
+                        <div class="relative">
+                            <label for="edit_status" class="mb-2 text-base font-medium">@lang('locale.status')</label>
+                            <!-- Icône statut (check-circle) -->
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="lucide lucide-check-circle absolute size-5 ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-zink-200"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M9 12l2 2 4-4"/>
+                            </svg>
+                            <select id="edit_status" name="status" class="ltr:pl-10 rtl:pr-10 form-select w-full">
+                                @foreach(App\Enums\ProductStatusEnum::cases() as $status)
+                                    <option value="{{ $status->value }}"
+                                        {{ $product->status === $status->value ? 'selected' : '' }}>
+                                        @lang('locale.' . $status->value)
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
-                        <div class="w-full md:w-1/3">
-                            <label for="edit_shape" class="mb-2 text-base font-medium">@lang('locale.shape')</label>
-                            <input type="text" id="edit_shape" name="shape" value="{{ $product->shape }}" class="form-input w-full" />
+                    </div>
+
+                    <!-- Marque, matière -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="relative">
+                            <label for="edit_brand" class="mb-2 text-base font-medium">@lang('locale.brand')</label>
+                            <!-- Icône marque (tag) -->
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="lucide lucide-tag absolute size-5 ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-zink-200"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M20.59 13.41a2 2 0 0 1 0 2.83l-4.17 4.17a2 2 0 0 1-2.83 0L3 10V3h7z"></path>
+                                <circle cx="7.5" cy="7.5" r="1.5"></circle>
+                            </svg>
+                            <input type="text" id="edit_brand" value="{{ $product->brand }}" name="brand" class="ltr:pl-10 rtl:pr-10 form-input w-full" />
                         </div>
-                        <div class="w-full md:w-1/3">
-                            <label for="edit_color" class="mb-2 text-base font-medium">@lang('locale.color')</label>
-                            <input type="text" id="edit_color" value="{{ $product->color }}" name="color" class="form-input w-full" />
+                        <div class="relative">
+                            <label for="edit_material" class="mb-2 text-base font-medium">@lang('locale.material')</label>
+                            <!-- Icône matériel (tool) -->
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="lucide lucide-tool absolute size-5 ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-zink-200"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M14.7 3.3l6 6-8 8-6-6 8-8z"></path>
+                            </svg>
+                            <input type="text" id="edit_material" value="{{ $product->material }}" name="material" class="ltr:pl-10 rtl:pr-10 form-input w-full" />
                         </div>
                     </div>
-    
-                    <!-- Catégorie -->
-                    <div class="mb-4">
-                        <label for="edit_category_id" class="mb-2 text-base font-medium">@lang('locale.category', ['suffix'=>app()->getLocale() == 'en' ? 'y' : ''])</label>
-                        <select id="edit_category_id" name="category_id" class="form-select w-full">
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
+
+                    <!-- Genre, forme, couleur -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="relative">
+                            <label for="edit_gender" class="mb-2 text-base font-medium">@lang('locale.gender')</label>
+                            <!-- Icône genre (users) -->
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="lucide lucide-users absolute size-5 ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-zink-200"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-3-3.87M7 21v-2a4 4 0 0 1 3-3.87"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <select id="edit_gender" name="gender" class="ltr:pl-10 rtl:pr-10 form-select w-full">
+                                <option value="">@lang('locale.choose')</option>
+                                <option value="men" {{ $product->gender == 'men' ? 'selected' : '' }}>@lang('locale.men')</option>
+                                <option value="women" {{ $product->gender == 'women' ? 'selected' : '' }}>@lang('locale.women')</option>
+                                <option value="unisex" {{ $product->gender == 'unisex' ? 'selected' : '' }}>@lang('locale.unisex')</option>
+                                <option value="kids" {{ $product->gender == 'kids' ? 'selected' : '' }}>@lang('locale.kids')</option>
+                            </select>
+                        </div>
+                        <div class="relative">
+                            <label for="edit_shape" class="mb-2 text-base font-medium">@lang('locale.shape')</label>
+                            <!-- Icône forme (square) -->
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="lucide lucide-square absolute size-5 ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-zink-200"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            </svg>
+                            <input type="text" id="edit_shape" name="shape" value="{{ $product->shape }}" class="ltr:pl-10 rtl:pr-10 form-input w-full" />
+                        </div>
+                        <div class="relative">
+                            <label for="edit_color" class="mb-2 text-base font-medium">@lang('locale.color')</label>
+                            <!-- Icône couleur (droplet) -->
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="lucide lucide-droplet absolute size-5 ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-zink-200"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2C7 7 5 11 5 14a7 7 0 0 0 14 0c0-3-2-7-7-12z"></path>
+                            </svg>
+                            <input type="text" id="edit_color" value="{{ $product->color }}" name="color" class="ltr:pl-10 rtl:pr-10 form-input w-full" />
+                        </div>
                     </div>
     
                     <div class="mb-4">

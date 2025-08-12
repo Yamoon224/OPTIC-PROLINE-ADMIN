@@ -24,7 +24,7 @@ use App\Http\Controllers\NotificationController;
 |
 */
 
-Route::get('/', [Controller::class, 'welcome'])->name('welcome');
+// Route::get('/', [Controller::class, 'welcome'])->name('welcome');
 
 Route::get('/switch/{locale}/language', [Controller::class, 'switchLocale'])->name('locales.switch');
 

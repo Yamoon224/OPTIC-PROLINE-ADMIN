@@ -66,22 +66,15 @@
                         </button>
                         <div class="absolute z-50 hidden ltr:text-left rtl:text-right bg-white rounded-md shadow-md !top-4 dropdown-menu min-w-[20rem] lg:min-w-[26rem] dark:bg-zink-600" aria-labelledby="notificationDropdown">
                             <div class="p-4">
-                                <h6 class="mb-4 text-16">Notifications <span class="inline-flex items-center justify-center w-5 h-5 ml-1 text-[11px] font-medium border rounded-full text-white bg-orange-500 border-orange-500">15</span></h6>
+                                <h6 class="mb-4 text-16">@lang('locale.order', ['suffix'=>'s']) <span class="inline-flex items-center justify-center w-5 h-5 ml-1 text-[11px] font-medium border rounded-full text-white bg-orange-500 border-orange-500">{{ '' }}</span></h6>
                                 <ul class="flex flex-wrap w-full p-1 mb-2 text-sm font-medium text-center rounded-md filter-btns text-slate-500 bg-slate-100 nav-tabs dark:bg-zink-500 dark:text-zink-200" data-filter-target="notification-list">
                                     <li class="grow">
-                                        <a href="javascript:void(0);" data-filter="all" class="inline-block nav-link px-1.5 w-full py-1 text-xs transition-all duration-300 ease-linear rounded-md text-slate-500 border border-transparent [&.active]:bg-white [&.active]:text-custom-500 hover:text-custom-500 active:text-custom-500 dark:text-zink-200 dark:hover:text-custom-500 dark:[&.active]:bg-zink-600 -mb-[1px] active">View All</a>
+                                        <a href="javascript:void(0);" data-filter="all" class="inline-block nav-link px-1.5 w-full py-1 text-xs transition-all duration-300 ease-linear rounded-md text-slate-500 border border-transparent [&.active]:bg-white [&.active]:text-custom-500 hover:text-custom-500 active:text-custom-500 dark:text-zink-200 dark:hover:text-custom-500 dark:[&.active]:bg-zink-600 -mb-[1px] active">@lang('locale.pending')</a>
                                     </li>
                                     <li class="grow">
-                                        <a href="javascript:void(0);" data-filter="mention" class="inline-block nav-link px-1.5 w-full py-1 text-xs transition-all duration-300 ease-linear rounded-md text-slate-500 border border-transparent [&.active]:bg-white [&.active]:text-custom-500 hover:text-custom-500 active:text-custom-500 dark:text-zink-200 dark:hover:text-custom-500 dark:[&.active]:bg-zink-600 -mb-[1px]">Mentions</a>
-                                    </li>
-                                    <li class="grow">
-                                        <a href="javascript:void(0);" data-filter="follower" class="inline-block nav-link px-1.5 w-full py-1 text-xs transition-all duration-300 ease-linear rounded-md text-slate-500 border border-transparent [&.active]:bg-white [&.active]:text-custom-500 hover:text-custom-500 active:text-custom-500 dark:text-zink-200 dark:hover:text-custom-500 dark:[&.active]:bg-zink-600 -mb-[1px]">Followers</a>
-                                    </li>
-                                    <li class="grow">
-                                        <a href="javascript:void(0);" data-filter="invite" class="inline-block nav-link px-1.5 w-full py-1 text-xs transition-all duration-300 ease-linear rounded-md text-slate-500 border border-transparent [&.active]:bg-white [&.active]:text-custom-500 hover:text-custom-500 active:text-custom-500 dark:text-zink-200 dark:hover:text-custom-500 dark:[&.active]:bg-zink-600 -mb-[1px]">Invites</a>
+                                        <a href="javascript:void(0);" data-filter="mention" class="inline-block nav-link px-1.5 w-full py-1 text-xs transition-all duration-300 ease-linear rounded-md text-slate-500 border border-transparent [&.active]:bg-white [&.active]:text-custom-500 hover:text-custom-500 active:text-custom-500 dark:text-zink-200 dark:hover:text-custom-500 dark:[&.active]:bg-zink-600 -mb-[1px]">@lang('locale.processing')</a>
                                     </li>
                                 </ul>
-
                             </div>
                             <div data-simplebar class="max-h-[350px]">
                                 <div class="flex flex-col gap-1" id="notification-list">
@@ -110,43 +103,11 @@
                                             <div class="w-1.5 h-1.5 bg-custom-500 rounded-full"></div> 15 min
                                         </div>
                                     </a>
-                                    <a href="index.html#!" class="flex gap-3 p-4 product-item hover:bg-slate-50 dark:hover:bg-zink-500 invite">
-                                        <div class="flex items-center justify-center w-10 h-10 bg-red-100 rounded-md shrink-0">
-                                            <i data-lucide="shopping-bag" class="w-5 h-5 text-red-500 fill-red-200"></i>
-                                        </div>
-                                        <div class="grow">
-                                            <h6 class="mb-1 font-medium">Successfully purchased a business plan for <span class="text-red-500">$199.99</span></h6>
-                                            <p class="mb-0 text-sm text-slate-500 dark:text-zink-300"><i data-lucide="clock" class="inline-block w-3.5 h-3.5 mr-1"></i> <span class="align-middle">Monday 11:26 AM</span></p>
-                                        </div>
-                                        <div class="flex items-center self-start gap-2 text-xs text-slate-500 shrink-0 dark:text-zink-300">
-                                            <div class="w-1.5 h-1.5 bg-custom-500 rounded-full"></div> Yesterday
-                                        </div>
-                                    </a>
-                                    <a href="index.html#!" class="flex gap-3 p-4 product-item hover:bg-slate-50 dark:hover:bg-zink-500 mention">
-                                        <div class="relative shrink-0">
-                                            <div class="w-10 h-10 bg-pink-100 rounded-md">
-                                                <img src="{{ asset('images/avatar-7.png') }}" alt="" class="rounded-md">
-                                            </div>
-                                            <div class="absolute text-orange-500 -bottom-0.5 -right-0.5 text-16">
-                                                <i class="ri-heart-fill"></i>
-                                            </div>
-                                        </div>
-                                        <div class="grow">
-                                            <h6 class="mb-1 font-medium"><b>@scott</b> liked your post</h6>
-                                            <p class="mb-0 text-sm text-slate-500 dark:text-zink-300"><i data-lucide="clock" class="inline-block w-3.5 h-3.5 mr-1"></i> <span class="align-middle">Thursday 06:59 AM</span></p>
-                                        </div>
-                                        <div class="flex items-center self-start gap-2 text-xs text-slate-500 shrink-0 dark:text-zink-300">
-                                            <div class="w-1.5 h-1.5 bg-custom-500 rounded-full"></div> 1 Week
-                                        </div>
-                                    </a>
                                 </div>
                             </div>
                             <div class="flex items-center gap-2 p-4 border-t border-slate-200 dark:border-zink-500">
-                                <div class="grow">
-                                    <a href="index.html#!">Manage Notification</a>
-                                </div>
                                 <div class="shrink-0">
-                                    <button type="button" class="px-2 py-1.5 text-xs text-white transition-all duration-200 ease-linear btn bg-custom-500 border-custom-500 hover:text-white hover:bg-custom-600 hover:border-custom-600 focus:text-white focus:bg-custom-600 focus:border-custom-600 focus:ring focus:ring-custom-100 active:text-white active:bg-custom-600 active:border-custom-600 active:ring active:ring-custom-100">View All Notification <i data-lucide="move-right" class="inline-block w-3.5 h-3.5 ml-1"></i></button>
+                                    <button type="button" class="px-2 py-1.5 text-xs text-white transition-all duration-200 ease-linear btn bg-custom-500 border-custom-500 hover:text-white hover:bg-custom-600 hover:border-custom-600 focus:text-white focus:bg-custom-600 focus:border-custom-600 focus:ring focus:ring-custom-100 active:text-white active:bg-custom-600 active:border-custom-600 active:ring active:ring-custom-100">@lang('locale.wiew_orders') <i data-lucide="move-right" class="inline-block w-3.5 h-3.5 ml-1"></i></button>
                                 </div>
                             </div>
                         </div>

@@ -41,7 +41,7 @@ function getChartColorsArray(chartId) {
             const mappedColors = parsedColors.map((value) => {
                 const newValue = value.replace(/\s/g, "");
                 if (!newValue.includes("#")) {
-                    const element = document.querySelector(newValue);
+                    const element = document.querySelector(newValue);  
                     if (element) {
                         const styles = window.getComputedStyle(element);
                         const backgroundColor = styles.backgroundColor;

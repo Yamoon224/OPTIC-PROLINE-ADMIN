@@ -7,7 +7,7 @@
     @endpush
 
     {{-- Statistiques en haut si tu veux garder la grid (sinon tu peux adapter ou supprimer) --}}
-    <div class="grid grid-cols-1 gap-x-5 md:grid-cols-2 xl:grid-cols-12 mb-4">
+    <div class="grid grid-cols-1 gap-x-5 md:grid-cols-2 xl:grid-cols-12 mb-1">
         <div class="xl:col-span-6">
             <div class="card">
                 <div class="flex items-center gap-4 card-body">
@@ -15,8 +15,8 @@
                         <i data-lucide="user-x-2"></i>
                     </div>
                     <div class="overflow-hidden grow">
-                        <h5 class="mb-1 text-16"><span class="counter-value" data-target="6">0</span></h5>
-                        <p class="truncate text-slate-500 dark:text-zink-200">Absent Employee (Today)</p>
+                        <h5 class="mb-1 text-16"><span class="counter-value" data-target="{{ $products->where('status', 'on_demand')->count() }}">{{ $products->where('status', 'on_demand')->count() }}</span></h5>
+                        <p class="truncate text-slate-500 dark:text-zink-200">@lang('locale.on_demand')</p>
                     </div>
                 </div>
             </div>
@@ -28,14 +28,13 @@
                         <i data-lucide="user-check-2"></i>
                     </div>
                     <div class="overflow-hidden grow">
-                        <h5 class="mb-1 text-16"><span class="counter-value" data-target="32">0</span></h5>
-                        <p class="truncate text-slate-500 dark:text-zink-200">Present Employee (Today)</p>
+                        <h5 class="mb-1 text-16"><span class="counter-value" data-target="{{ $products->where('status', 'in_stock')->count() }}">{{ $products->where('status', 'in_stock')->count() }}</span></h5>
+                        <p class="truncate text-slate-500 dark:text-zink-200">@lang('locale.in_stock')</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
     <div class="card">
         <div class="border-b border-custom-200 flex items-center justify-between p-4">
             <h4 class="text-18">@lang('locale.product', ['suffix'=>'s'])</h4>
@@ -73,7 +72,14 @@
                         @foreach ($products as $product)
                         <tr>
                             <td class="px-3.5 py-1 first:pl-5 last:pr-5 border-y border-slate-200 dark:border-zink-500">{{ $loop->iteration }}</td>
-                            <td class="px-3.5 py-1 first:pl-5 last:pr-5 border-y border-slate-200 dark:border-zink-500">{{ $product->name }}</td>
+                            <td class="px-3.5 py-1 first:pl-5 last:pr-5 border-y border-slate-200 dark:border-zink-500">
+                                <a href="{{ route('products.show', $product->id) }}" class="flex items-center gap-3">
+                                    <div class="w-6 h-6 rounded-full shrink-0 bg-slate-100">
+                                        <img src="{{ asset($product->image) }}" alt="LOGO" class="h-6 rounded-full">
+                                    </div>
+                                    <h6 class="grow">{{ $product->name }}</h6>
+                                </a>
+                            </td>
                             <td class="px-3.5 py-1 first:pl-5 last:pr-5 border-y border-slate-200 dark:border-zink-500">{{ number_format($product->unit_price, 2) }}</td>
                             <td class="px-3.5 py-1 first:pl-5 last:pr-5 border-y border-slate-200 dark:border-zink-500">{{ number_format($product->batch_price, 2) }}</td>
                             <td class="px-3.5 py-1 first:pl-5 last:pr-5 border-y border-slate-200 dark:border-zink-500">{{ $product->stock_quantity }}</td>

@@ -11,57 +11,112 @@
                 <form id="add-product-form" method="POST" action="{{ route('products.store') }}" enctype="multipart/form-data">
                     @csrf
     
-                    <!-- Nom du produit -->
-                    <div class="mb-4">
-                        <label for="add_name" class="inline-block mb-2 text-base font-medium">@lang('locale.product_name') <span class="text-red-500">*</span></label>
-                        <input type="text" id="add_name" name="name" required class="form-input w-full" />
+                    <input type="hidden" name="_previous" value="{{ route('products.index') }}">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="relative">
+                            <label for="add_name" class="block mb-2">@lang('locale.product_name') <span class="text-red-500">*</span></label>
+                            <!-- Icône produit (ex: tag) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-tag absolute size-4 ltr:left-3 rtl:right-3 top-1/2 translate-y-1/2 text-slate-500 dark:text-zink-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M20.59 13.41a2 2 0 0 1 0 2.83l-4.17 4.17a2 2 0 0 1-2.83 0L3 10V3h7z"></path>
+                                <circle cx="7.5" cy="7.5" r="1.5"></circle>
+                            </svg>
+                            <input type="text" id="add_name" name="name" required placeholder="@lang('locale.product_name')" class="ltr:pl-10 rtl:pr-10 form-input w-full" />
+                        </div>
+                    
+                        <div class="relative">
+                            <label for="add_category_id" class="block mb-2">@lang('locale.category', ['suffix'=>app()->getLocale() == 'en' ? 'y' : '']) <span class="text-red-500">*</span></label>
+                            <!-- Icône catégorie (tag) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-tag absolute size-4 ltr:left-3 rtl:right-3 top-1/2 translate-y-1/2 text-slate-500 dark:text-zink-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M20.59 13.41a2 2 0 0 1 0 2.83l-4.17 4.17a2 2 0 0 1-2.83 0L3 10V3h7z"></path>
+                                <circle cx="7.5" cy="7.5" r="1.5"></circle>
+                            </svg>
+                            <select id="add_category_id" name="category_id" class="ltr:pl-10 rtl:pr-10 form-select w-full">
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}">{{ ucfirst($category->name) }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
-    
+                    
                     <!-- Prix unitaire & prix de lot -->
-                    <div class="flex flex-wrap gap-4 mb-4">
-                        <div class="w-full md:w-1/2">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="relative">
                             <label for="add_unit_price" class="mb-2 text-base font-medium">@lang('locale.unit_price') <span class="text-red-500">*</span></label>
-                            <input type="number" id="add_unit_price" name="unit_price" step="0.01" min="0" required class="form-input w-full" />
+                            <!-- Icône prix/unité (ex: dollar sign) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-dollar-sign absolute size-4 ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-zink-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                            </svg>
+                            <input type="number" id="add_unit_price" name="unit_price" step="0.01" min="0" required placeholder="@lang('locale.unit_price')" class="ltr:pl-10 rtl:pr-10 form-input w-full" />
                         </div>
-                        <div class="w-full md:w-1/2">
-                            <label for="add_batch_price" class="mb-2 text-base font-medium">@lang('locale.batch_price')</label>
-                            <input type="number" id="add_batch_price" name="batch_price" step="0.01" min="0" class="form-input w-full" />
+                        <div class="relative">
+                            <label for="add_batch_price" class="mb-2 text-base font-medium">@lang('locale.batch_price') <span class="text-red-500">*</span></label>
+                            <!-- Icône lot (box) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-box absolute size-4 ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-zink-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l1-0.57"></path>
+                                <path d="M16 12v6"></path>
+                                <path d="M8 12v6"></path>
+                            </svg>
+                            <input type="number" id="add_batch_price" name="batch_price" step="0.01" min="0" placeholder="@lang('locale.batch_price')" class="ltr:pl-10 rtl:pr-10 form-input w-full" />
                         </div>
                     </div>
-    
+                    
                     <!-- Quantité en stock & statut -->
-                    <div class="flex flex-wrap gap-4 mb-4">
-                        <div class="w-full md:w-1/2">
-                            <label for="add_stock_quantity" class="mb-2 text-base font-medium">@lang('locale.stock_quantity')</label>
-                            <input type="number" id="add_stock_quantity" name="stock_quantity" min="0" class="form-input w-full" />
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="relative">
+                            <label for="add_stock_quantity" class="mb-2 text-base font-medium">@lang('locale.stock_quantity') <span class="text-red-500">*</span></label>
+                            <!-- Icône stock (archive) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-archive absolute size-4 ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-zink-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="4" rx="2" ry="2"></rect>
+                                <path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"></path>
+                                <line x1="10" y1="12" x2="14" y2="12"></line>
+                            </svg>
+                            <input type="number" id="add_stock_quantity" name="stock_quantity" min="0" placeholder="@lang('locale.stock_quantity')" class="ltr:pl-10 rtl:pr-10 form-input w-full" />
                         </div>
-                        <div class="w-full md:w-1/2">
-                            <label for="add_status" class="mb-2 text-base font-medium">@lang('locale.status')</label>
-                            <select id="add_status" name="status" class="form-select w-full">
+                        <div class="relative">
+                            <label for="add_status" class="mb-2 text-base font-medium">@lang('locale.status') <span class="text-red-500">*</span></label>
+                            <!-- Icône statut (check-circle) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-check-circle absolute size-4 ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-zink-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9 12l2 2 4-4"></path>
+                            </svg>
+                            <select id="add_status" name="status" class="ltr:pl-10 rtl:pr-10 form-select w-full">
                                 @foreach(App\Enums\ProductStatusEnum::cases() as $status)
                                     <option value="{{ $status->value }}">@lang('locale.' . $status->value)</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
-    
-                    <!-- Marque, matière -->
-                    <div class="flex flex-wrap gap-4 mb-4">
-                        <div class="w-full md:w-1/2">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="relative">
                             <label for="add_brand" class="mb-2 text-base font-medium">@lang('locale.brand')</label>
-                            <input type="text" id="add_brand" name="brand" class="form-input w-full" />
+                            <!-- Icône marque (tag) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-tag absolute size-4 ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-zink-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M20.59 13.41a2 2 0 0 1 0 2.83l-4.17 4.17a2 2 0 0 1-2.83 0L3 10V3h7z"></path>
+                                <circle cx="7.5" cy="7.5" r="1.5"></circle>
+                            </svg>
+                            <input type="text" id="add_brand" name="brand" placeholder="@lang('locale.brand')" class="ltr:pl-10 rtl:pr-10 form-input w-full" />
                         </div>
-                        <div class="w-full md:w-1/2">
+                        <div class="relative">
                             <label for="add_material" class="mb-2 text-base font-medium">@lang('locale.material')</label>
-                            <input type="text" id="add_material" name="material" class="form-input w-full" />
+                            <!-- Icône matériel (tool) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-tool absolute size-4 ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-zink-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M14.7 3.3l6 6-8 8-6-6 8-8z"></path>
+                            </svg>
+                            <input type="text" id="add_material" name="material" placeholder="@lang('locale.material')" class="ltr:pl-10 rtl:pr-10 form-input w-full" />
                         </div>
                     </div>
-    
+                    
                     <!-- Genre, forme, couleur -->
-                    <div class="flex flex-wrap gap-4 mb-4">
-                        <div class="w-full md:w-1/3">
-                            <label for="add_gender" class="mb-2 text-base font-medium">@lang('locale.gender')</label>
-                            <select id="add_gender" name="gender" class="form-select w-full">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="relative">
+                            <label for="add_gender" class="block mb-2">@lang('locale.gender') <span class="text-red-500">*</span></label>
+                            <!-- Icône genre (users) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-users absolute size-4 ltr:left-3 rtl:right-3 top-1/2 translate-y-1/2 text-slate-500 dark:text-zink-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-3-3.87M7 21v-2a4 4 0 0 1 3-3.87"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                            <select id="add_gender" name="gender" required class="ltr:pl-10 rtl:pr-10 form-select w-full">
                                 <option value="">@lang('locale.choose')</option>
                                 <option value="men">@lang('locale.men')</option>
                                 <option value="women">@lang('locale.women')</option>
@@ -69,26 +124,24 @@
                                 <option value="kids">@lang('locale.kids')</option>
                             </select>
                         </div>
-                        <div class="w-full md:w-1/3">
-                            <label for="add_shape" class="mb-2 text-base font-medium">@lang('locale.shape')</label>
-                            <input type="text" id="add_shape" name="shape" class="form-input w-full" />
+                        <div class="relative">
+                            <label for="add_shape" class="block mb-2">@lang('locale.shape')</label>
+                            <!-- Icône forme (square) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-square absolute size-4 ltr:left-3 rtl:right-3 top-1/2 translate-y-1/2 text-slate-500 dark:text-zink-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            </svg>
+                            <input type="text" id="add_shape" name="shape" placeholder="@lang('locale.shape')" class="ltr:pl-10 rtl:pr-10 form-input w-full" />
                         </div>
-                        <div class="w-full md:w-1/3">
-                            <label for="add_color" class="mb-2 text-base font-medium">@lang('locale.color')</label>
-                            <input type="text" id="add_color" name="color" class="form-input w-full" />
+                        <div class="relative">
+                            <label for="add_color" class="block mb-2">@lang('locale.color')</label>
+                            <!-- Icône couleur (droplet) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="lucide lucide-droplet absolute size-4 ltr:left-3 rtl:right-3 top-1/2 translate-y-1/2 text-slate-500 dark:text-zink-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2C7 7 5 11 5 14a7 7 0 0 0 14 0c0-3-2-7-7-12z"></path>
+                            </svg>
+                            <input type="text" id="add_color" name="color" placeholder="@lang('locale.color')" class="ltr:pl-10 rtl:pr-10 form-input w-full" />
                         </div>
                     </div>
-    
-                    <!-- Catégorie -->
-                    <div class="mb-4">
-                        <label for="add_category_id" class="mb-2 text-base font-medium">@lang('locale.category', ['suffix'=>app()->getLocale() == 'en' ? 'y' : ''])</label>
-                        <select id="add_category_id" name="category_id" class="form-select w-full">
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-    
+                        
                     <div class="mb-4">
                         <div class="card">
                             <div class="card-body">

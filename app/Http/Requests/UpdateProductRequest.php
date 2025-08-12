@@ -37,6 +37,7 @@ class UpdateProductRequest extends FormRequest
             'shape' => ['nullable', 'string', 'max:100'],
             'color' => ['nullable', 'string', 'max:100'],
             'category_id' => ['nullable', 'exists:categories,id'],
+            'logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:2048'], // max en Ko (2048 Ko = 2 Mo)
         ];
     }
 }
