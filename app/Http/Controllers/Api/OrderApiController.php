@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Resources\OrderResource;
+use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
-use App\Resources\OrderResource;
 use App\Repositories\OrderRepositoryInterface;
-use Illuminate\Http\JsonResponse;
 
 class OrderApiController extends Controller
 {
@@ -36,7 +37,15 @@ class OrderApiController extends Controller
      */
     public function index(): JsonResponse
     {
-        $orders = $this->orderRepository->getAll();
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['message' => 'Non autorisé'], 401);
+        }
+
+        // Récupère les commandes de l'utilisateur connecté
+        $orders = $user->orders()->get();
+
         return OrderResource::collection($orders)->response();
     }
 
